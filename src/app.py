@@ -1,5 +1,6 @@
 import flet as ft
-from utils.container_utils import on_hover
+from utils.container_utils import build_container
+from game.game_logic import shuffle
 
 def main(page: ft.Page):
     page.title = "Emanuel's Connections"
@@ -7,28 +8,22 @@ def main(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
 
     page.fonts = {
-        "Cute Ghost": "assets/fonts/CuteGhostRegular.woff2"
+        "SpecialGothicCondensedOne": "fonts/SpecialGothicCondensedOne-Regular.ttf",
+        "Cute Ghost": "fonts/Cute Ghost.ttf"
     }
 
     header = ft.Text(
         "Emanuel's Connections",
-        size=30,
-        text_align=ft.TextAlign.CENTER
+        size=80,
+        text_align=ft.TextAlign.CENTER,
+        font_family="Cute Ghost"
     )
 
     grid = ft.Column(
         controls = [
             ft.Row(
                 controls = [
-                    ft.Container(
-                        width=100,
-                        height=100,
-                        border=ft.border.all(1, '#edebe6'),
-                        bgcolor='#edebe6',
-                        border_radius=10,
-                        on_hover=on_hover,
-                        data=r*4+c
-                    ) for c in range(4)
+                    build_container(r*4+c) for c in range(4)
                 ],
                 spacing = 12,
                 alignment=ft.MainAxisAlignment.CENTER
@@ -37,7 +32,11 @@ def main(page: ft.Page):
         spacing = 12,
         alignment=ft.MainAxisAlignment.CENTER
     )
+
     page.add(header)
     page.add(grid)
+    page.add(ft.ElevatedButton("Shuffle", on_click=shuffle))
+
+    shuffle(None)
 
 ft.app(target=main, view=ft.AppView.WEB_BROWSER)
